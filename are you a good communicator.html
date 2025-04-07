@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Communication Master</title>
+    <style>
+        body {font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px}
+        .scene {background: #f5f5f5; padding: 15px; margin: 20px 0; border-radius: 8px}
+        .scene:nth-child(odd) {background: #e3f2fd}
+        button {display: block; margin: 10px; padding: 12px; width: 100%; 
+                border: 1px solid #ddd; border-radius: 5px; text-align: left; cursor: pointer}
+        button:hover {background: #f0f0f0}
+        #score {position: fixed; top: 20px; right: 20px; background: white; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1)}
+        .feedback {color: #666; font-size: 0.9em}
+    </style>
+</head>
+<body>
+    <div id="score">
+        <h3>沟通能力评估</h3>
+        <p>冲突调解: <span id="conflictScore">0</span></p>
+        <p>说服任务: <span id="persuasionScore">0</span></p>
+    </div>
+
+    <!-- 冲突调解场景 -->
+    <div class="scene">
+        <h2>场景1: 室友冲突调解</h2>
+        <div class="question">
+            <p>情境：室友连续三天未经允许使用你的吹风机</p>
+            <h4>Q1. 开场白选择：</h4>
+            <button onclick="scoreQuestion('conflict', [0,1,0], this)">A. "你偷用吹风机上瘾了吗？"</button>
+            <button onclick="scoreQuestion('conflict', [2,3,2], this)">B. "最近看到吹风机位置常变动..."</button>
+            <button onclick="scoreQuestion('conflict', [0,0,0], this)">C. 直接把吹风机锁起来</button>
+        </div>
+        <!-- 后续问题结构类似，此处省略以保持简洁 -->
+    </div>
+
+    <!-- 说服任务场景 -->
+    <div class="scene">
+        <h2>场景5: 延长热水供应说服任务</h2>
+        <div class="question">
+            <p>情境：劝说宿管延长热水供应时间</p>
+            <h4>Q1. 开场策略：</h4>
+            <button onclick="scoreQuestion('persuasion', [1,0,1], this)">A. "你们服务太差了！"</button>
+            <button onclick="scoreQuestion('persuasion', [3,2,3], this)">B. "浴室使用量增加35%..."</button>
+            <button onclick="scoreQuestion('persuasion', [2,3,2], this)">C. "我室友昨晚感冒了..."</button>
+        </div>
+        <!-- 后续问题结构类似 -->
+    </div>
+
+    <button onclick="location.reload()" style="background:#4CAF50;color:white">重新开始</button>
+
+    <script>
+        let conflictScores = [0, 0, 0]; // 倾听/表达/共情
+        let persuasionScores = [0, 0, 0]; // 逻辑/共情/说服
+
+        function scoreQuestion(sceneType, scores, button) {
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            feedback.innerHTML = `<strong>本次评分：</strong>${scores.join('/')}`;
+            button.parentNode.appendChild(feedback);
+
+            if(sceneType === 'conflict') {
+                conflictScores = conflictScores.map((v,i) => v + scores[i]);
+                document.getElementById('conflictScore').textContent = conflictScores.join('/');
+            } else {
+                persuasionScores = persuasionScores.map((v,i) => v + scores[i]);
+                document.getElementById('persuasionScore').textContent = persuasionScores.join('/');
+            }
+            button.disabled = true;
+        }
+    </script>
+</body>
+</html>
